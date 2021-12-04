@@ -1,6 +1,21 @@
 from django.contrib import admin
-from products.models import Product
+from products.models import Product, Stock, Price
 
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ("sku", "name")
+    search_fields = ("name", "sku")
+    list_display = ("sku", "name", "color", "size")
+
+
+@admin.register(Stock)
+class StockAdmin(admin.ModelAdmin):
+    list_display = ("product", "quantity")
+    search_fields = ("product__name", "product__sku")
+    autocomplete_fields = ("product", )
+
+
+@admin.register(Price)
+class StockAdmin(admin.ModelAdmin):
+    list_display = ("product", "amount")
+    search_fields = ("product__name", "product__sku")
+    autocomplete_fields = ("product", )

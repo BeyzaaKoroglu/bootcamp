@@ -18,7 +18,7 @@ class Product(BaseAbstractModel):
 
 
     def __str__(self):
-        return f"{self.sku}"
+        return f"{self.sku} - {self.name}"
 
 
 class Stock(BaseAbstractModel):
