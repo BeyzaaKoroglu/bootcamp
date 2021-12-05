@@ -1,11 +1,28 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
 from django.utils.translation import gettext_lazy as _
-from customers.models import Customer, Country, City, Address
+from customers.models import Customer, Address, City, Country
+
+
+class CityInline(admin.TabularInline):
+    """
+    Inline class for City
+    """
+    model = City
+
+
+class CountryInline(admin.TabularInline):
+    """
+    Inline class for Country
+    """
+    model = Country
 
 
 @admin.register(Customer)
 class CustomerAdmin(UserAdmin):
+    """
+    Admin view for Customer
+    """
     change_user_password_template = None
     fieldsets = (
         (None, {"fields": ("email", "password")}),
@@ -38,19 +55,33 @@ class CustomerAdmin(UserAdmin):
     ordering = ("email",)
 
 
-@admin.register(Country)
-class CountryAdmin(admin.ModelAdmin):
-    list_display = ("name",)
-    search_fields = ("name",)
+@admin.register(Address)
+class AddressAdmin(admin.ModelAdmin):
+    """
+    Admin view for Address
+    """
+    list_display = ("customer", "name", "city")
+    list_filter = ("city",)
+    search_fields = ("line_1", "line_2", "city")
+    # inlines = (CityInline, CountryInline) #TODO: Add inlines
 
 
 @admin.register(City)
 class CityAdmin(admin.ModelAdmin):
-    list_display = ("name",)
-    search_fields = ("name",)
+    """
+    Admin view for City
+    """
+    list_display = ("name", "country")
+    list_filter = ("country",)
+    search_fields = ("city",)
+    # inlines = (CountryInline,) #TODO: Add inlines
 
 
-@admin.register(Address)
-class AddressAdmin(admin.ModelAdmin):
+@admin.register(Country)
+class CountryAdmin(admin.ModelAdmin):
+    """
+    Admin view for Country
+    """
     list_display = ("name",)
+    list_filter = ("name",)
     search_fields = ("name",)

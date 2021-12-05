@@ -1,28 +1,28 @@
 from django.contrib import admin
 
-from orders.models import BillingAddress, InvoiceAddress, Order, OrderBankAccount, OrderItem
+from orders.models import Order, OrderItem
 
 
-@admin.register(BillingAddress)
-class BillingAddressAdmin(admin.ModelAdmin):
-    list_display = ("full_name",)
-
-
-@admin.register(InvoiceAddress)
-class InvoiceAddressAdmin(admin.ModelAdmin):
-    list_display = ("full_name",)
+class OrderItemInline(admin.TabularInline):
+    """
+    Inline for Order Item
+    """
+    model = OrderItem
 
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ("customer", "total_price")
-
-
-@admin.register(OrderBankAccount)
-class OrderBankAccountAdmin(admin.ModelAdmin):
-    list_display = ("name", "order", "bank_name")
+    """
+    Admin View for Order
+    """
+    list_display = ('customer', 'basket', 'total_price')
+    list_filter = ('customer', )
+    inlines = (OrderItemInline, )
 
 
 @admin.register(OrderItem)
 class OrderItemAdmin(admin.ModelAdmin):
-    list_display = ("product", "order", "price")
+    """
+    Admin View for OrderItem
+    """
+    list_display = ('order', 'product', 'price')

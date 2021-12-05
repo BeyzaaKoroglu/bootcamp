@@ -6,7 +6,10 @@ from products import enums
 
 
 class Category(BaseAbstractModel):
-    name = models.CharField(max_length=255, verbose_name=_("Category"))
+    """
+    Category model
+    """
+    name = models.CharField(max_length=255, verbose_name=_("Category Name"))
 
     class Meta:
         verbose_name = _("category")
@@ -17,13 +20,16 @@ class Category(BaseAbstractModel):
 
 
 class Product(BaseAbstractModel):
+    """
+    Product model
+    """
     sku = models.CharField(verbose_name=_("SKU"), max_length=100, unique=True)
     name = models.CharField(max_length=255, verbose_name=_("Name"))
     description = models.TextField(max_length=2000, verbose_name=_("Description"))
     color = models.CharField(
         choices=enums.Colors.choices, verbose_name=_("Color"), max_length=20)
     size = models.CharField(max_length=30, verbose_name=_("Size"))
-    categories = models.ManyToManyField(Category, verbose_name=_("Category"))
+    categories = models.ManyToManyField(Category, verbose_name=_("Categories"))
 
     class Meta:
         verbose_name = _("product")
@@ -34,6 +40,9 @@ class Product(BaseAbstractModel):
 
 
 class Stock(BaseAbstractModel):
+    """
+    Stock model
+    """
     product = models.OneToOneField(Product, verbose_name=_("Product"),
                                    on_delete=models.PROTECT)
     quantity = models.PositiveIntegerField(verbose_name=_("Quantity"))
@@ -43,10 +52,13 @@ class Stock(BaseAbstractModel):
         verbose_name_plural = _("stocks")
 
     def __str__(self):
-        return f"{self.product} - {self.quantity}"
+        return f"{self.quantity}"
 
 
 class Price(BaseAbstractModel):
+    """
+    Price model
+    """
     product = models.OneToOneField(Product, verbose_name=_("Product"),
                                    on_delete=models.PROTECT)
     amount = models.DecimalField(verbose_name=_("Amount"),
@@ -57,4 +69,4 @@ class Price(BaseAbstractModel):
         verbose_name_plural = _("prices")
 
     def __str__(self):
-        return f"{self.product} - {self.amount}"
+        return f"{self.amount}"
