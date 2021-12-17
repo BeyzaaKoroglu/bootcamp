@@ -13,16 +13,20 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
+from rest_framework_simplejwt.views import TokenRefreshView
 
 from baskets.views import BasketItemViewSet, BasketViewSet
-from customers.views import CustomerViewSet, AddressViewSet, CityViewSet, CountryViewSet
+from core.views import APITokenObtainPairView
+from customers.views import CustomerViewSet, AddressViewSet, CityViewSet, CountryViewSet, AdminCustomerViewSet, \
+    MyProfileViewSet
 from ecommerce.router import router
 from orders.views import OrderItemViewSet, OrderViewSet, BillingAddressViewSet, ShippingAddressViewSet, \
     OrderBankAccountViewSet
 from payments.views import BankAccountViewSet, BankViewSet
-from products.views import ProductViewSet, CategoryViewSet
+from products.views import ProductViewSet, CategoryViewSet, AdminProductViewSet
 
 router.register("products", ProductViewSet)
 router.register("categories", CategoryViewSet)
@@ -39,9 +43,20 @@ router.register("shipping_addresses", ShippingAddressViewSet)
 router.register("order_bank_accounts", OrderBankAccountViewSet)
 router.register("bank_accounts", BankAccountViewSet)
 router.register("banks", BankViewSet)
+router.register("admin-products", AdminProductViewSet, basename="admin-product")
+router.register("admin-customers", AdminCustomerViewSet, basename="admin-customer")
 
 
 urlpatterns = [
     path("api/", include(router.urls)),
     path('admin/', admin.site.urls),
+    path('api/token/', APITokenObtainPairView.as_view(), name='token_obtain_pair'),
+    path('api/token/refresh/', TokenRefreshView.as_view(), name='token_refresh'),
+    path('api/profile/', MyProfileViewSet.as_view(
+        {"get": "retrieve", "put": "update", "patch": "partial_update"}), name='profile'),
 ]
+
+if settings.DEBUG:
+    urlpatterns = urlpatterns + [
+        path("api-auth/", include("rest_framework.urls", namespace="rest_framework")),
+    ]
