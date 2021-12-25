@@ -1,3 +1,4 @@
+from django.contrib.auth.password_validation import validate_password
 from django.utils.translation import gettext_lazy as _
 from django.db.transaction import atomic
 from rest_framework import serializers
@@ -18,6 +19,36 @@ class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
         fields = ("first_name", "last_name", "email")
+
+
+class CustomerCreateSerializer(serializers.ModelSerializer):
+    password2 = serializers.CharField(label=_("Password repeat"), max_length=128, write_only=True)
+    password = serializers.CharField(label=_("Password"), max_length=128,
+                                     write_only=True, validators=[validate_password],
+                                     style={"input_type": "password"})
+
+    class Meta:
+        model = Customer
+        fields = ("first_name", "last_name", "email", "password", "password2")
+        extra_kwargs = {
+            "first_name": {"required": True, "allow_blank": False},
+            "last_name": {"required": True, "allow_blank": False},
+            #"password": {"required": True, "allow_blank": False, "write_only": True}
+        }
+
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
+        password = attrs["password"]
+        password2 = attrs["password2"]
+        if password != password2:
+            raise ValidationError(detail={"password2":_("Your passwords must be same")})
+        validate_password(password)
+        return attrs
+
+    def create(self, validated_data):
+        validated_data.pop("password2", None)
+        instance = Customer.objects.create_user(**validated_data)
+        return instance
 
 
 class CountrySerializer(serializers.ModelSerializer):
