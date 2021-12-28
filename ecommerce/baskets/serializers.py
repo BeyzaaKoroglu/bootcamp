@@ -1,4 +1,7 @@
+from decimal import Decimal
+
 from rest_framework import serializers
+from rest_framework.exceptions import ValidationError
 
 from baskets.models import BasketItem, Basket
 from customers.serializers import CustomerSerializer
@@ -21,10 +24,45 @@ class BasketSerializer(serializers.ModelSerializer):
 
 class BasketItemDetailedSerializer(BasketItemSerializer):
     product = ProductDetailedSerializer()
+    total = serializers.SerializerMethodField()
+
+    class Meta(BasketItemSerializer.Meta):
+        fields = BasketItemSerializer.Meta.fields + ("total",)
+
+    def get_total(self, obj):
+        return obj.price * obj.quantity
 
 
 class BasketDetailedSerializer(BasketSerializer):
     basketitem_set = BasketItemDetailedSerializer(many=True)
+    total = serializers.SerializerMethodField()
 
     class Meta(BasketSerializer.Meta):
-        fields = BasketSerializer.Meta.fields + ("basketitem_set", )
+        fields = BasketSerializer.Meta.fields + ("basketitem_set", "total")
+
+    def get_total(self, obj):
+        item_set = obj.basketitem_set.all()
+        total = Decimal("0")
+        for item in item_set:
+            total += item.price * item.quantity
+        return total
+
+
+class BasketItemValidateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = BasketItem
+        fields = ("product", "quantity")
+
+    def validate(self, attrs):
+        attrs = super().validate(attrs)
+        product = attrs.get("product")
+        quantity = attrs.get("quantity")
+        try:
+            stock = product.stock
+        except Exception:
+            raise ValidationError(detail={"product": _("Stock not found")})
+        if stock.quantity < 1:
+            raise ValidationError(detail={"product": _("Stock not found")})
+        if stock.quantity < quantity:
+            raise ValidationError(detail={"product": _("Stock not found")})
+        return attrs
