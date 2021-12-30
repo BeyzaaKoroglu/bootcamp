@@ -65,3 +65,6 @@ class BasketItemValidateSerializer(serializers.ModelSerializer):
             raise ValidationError(detail={"product": _("Stock not found")})
         return attrs
 
+    def to_representation(self, instance):
+        serializer = BasketDetailedSerializer()
+        return serializer.to_representation(instance)
