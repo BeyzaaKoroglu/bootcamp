@@ -105,6 +105,7 @@ class BasketViewSet(DetailedViewSetMixin, mixins.RetrieveModelMixin,
 
     @action(methods=["patch"], detail=True)
     def basket_item(self, *args, **kwargs):
+        print("basket islemleri basladı")
         basket = self.get_object()
         add_basket_item_serializer = BasketItemValidateSerializer(
             data=self.request.data)
@@ -124,4 +125,5 @@ class BasketViewSet(DetailedViewSetMixin, mixins.RetrieveModelMixin,
             basket_item.delete()
 
         serializer = BasketDetailedSerializer(instance=basket)
+        print("basket islemleri bitti")
         return Response(serializer.data)
