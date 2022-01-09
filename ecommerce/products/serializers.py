@@ -1,7 +1,7 @@
 from django.db.transaction import atomic
 from rest_framework import serializers
 
-from products.models import Product, Category, Price
+from products.models import Category, Price, Product
 
 
 class ProductSerializer(serializers.ModelSerializer):

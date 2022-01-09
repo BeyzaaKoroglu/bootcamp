@@ -1,6 +1,12 @@
 from django_filters import rest_framework as filters
 
-from orders.models import OrderItem, Order, OrderBankAccount, ShippingAddress, BillingAddress
+from orders.models import (
+    BillingAddress,
+    Order,
+    OrderBankAccount,
+    OrderItem,
+    ShippingAddress,
+)
 
 
 class OrderItemFilter(filters.FilterSet):

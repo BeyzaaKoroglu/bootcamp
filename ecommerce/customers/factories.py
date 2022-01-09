@@ -1,7 +1,7 @@
 import factory
 from factory.django import DjangoModelFactory
 
-from customers.models import Customer, Country, City, Address
+from customers.models import Address, City, Country, Customer
 
 
 class CustomerFactory(DjangoModelFactory):

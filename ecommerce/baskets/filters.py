@@ -1,6 +1,6 @@
 from django_filters import rest_framework as filters
 
-from baskets.models import BasketItem, Basket
+from baskets.models import Basket, BasketItem
 
 
 class BasketItemFilter(filters.FilterSet):

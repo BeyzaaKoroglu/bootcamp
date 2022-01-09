@@ -1,6 +1,6 @@
 from django_filters import rest_framework as filters
 
-from customers.models import Customer, Address, City, Country
+from customers.models import Address, City, Country, Customer
 
 
 class CustomerFilter(filters.FilterSet):

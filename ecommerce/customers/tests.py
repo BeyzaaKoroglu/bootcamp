@@ -1,10 +1,9 @@
 from django.test import TestCase
-
-from customers.factories import CustomerFactory, CityFactory, AddressFactory
-from customers.models import Address, City, Country
-from customers.serializers import AddressSerializer
-
 from rest_framework.test import APIRequestFactory
+
+from customers.factories import AddressFactory, CityFactory, CustomerFactory
+from customers.models import Address
+from customers.serializers import AddressSerializer
 
 
 class AddressSerializerTestCase(TestCase):

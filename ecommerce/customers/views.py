@@ -1,16 +1,21 @@
 from django.shortcuts import get_object_or_404
-from rest_framework import viewsets, permissions, mixins, status
-from rest_framework.response import Response
+from rest_framework import mixins, permissions, viewsets
 from rest_framework.viewsets import GenericViewSet
 
 from core.mixins import DetailedViewSetMixin
-from core.utils import IsStaffUserAuthenticated, IsNotAuthenticated
-from customers.filters import CustomerFilter, AddressFilter, CountryFilter, CityFilter
-from customers.models import Customer, Address, City, Country
-from customers.serializers import CustomerSerializer, AddressSerializer, CitySerializer, \
-    CountrySerializer, \
-    AddressDetailedSerializer, CityDetailedSerializer, ProfileSerializer, \
-    CustomerCreateSerializer
+from core.utils import IsNotAuthenticated, IsStaffUserAuthenticated
+from customers.filters import AddressFilter, CityFilter, CountryFilter, CustomerFilter
+from customers.models import Address, City, Country, Customer
+from customers.serializers import (
+    AddressDetailedSerializer,
+    AddressSerializer,
+    CityDetailedSerializer,
+    CitySerializer,
+    CountrySerializer,
+    CustomerCreateSerializer,
+    CustomerSerializer,
+    ProfileSerializer,
+)
 
 
 class AdminCustomerViewSet(viewsets.ModelViewSet):

@@ -3,9 +3,9 @@ from uuid import uuid4
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
+from baskets import enums
 from core.models import BaseAbstractModel
 from customers.models import Customer
-from baskets import enums
 from products.models import Product
 
 

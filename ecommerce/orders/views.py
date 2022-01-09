@@ -1,15 +1,19 @@
-from rest_framework import viewsets, mixins, status
+from rest_framework import mixins, status
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
 from core.mixins import DetailedViewSetMixin
-from orders.filters import OrderItemFilter, OrderFilter, BillingAddressFilter, ShippingAddressFilter, \
-    OrderBankAccountFilter
-from orders.models import OrderItem, Order, BillingAddress, ShippingAddress, OrderBankAccount
-from orders.serializers import OrderItemSerializer, OrderSerializer, OrderItemDetailedSerializer, \
-    OrderDetailedSerializer, BillingAddressSerializer, ShippingAddressSerializer, BillingAddressDetailedSerializer, \
-    ShippingAddressDetailedSerializer, OrderBankAccountSerializer, OrderBankAccountDetailedSerializer, \
-    CreateOrderSerializer
+from orders.filters import (
+    OrderFilter
+)
+from orders.models import (
+    Order
+)
+from orders.serializers import (
+    CreateOrderSerializer,
+    OrderDetailedSerializer,
+    OrderSerializer
+)
 
 
 class OrderViewSet(DetailedViewSetMixin, mixins.CreateModelMixin,

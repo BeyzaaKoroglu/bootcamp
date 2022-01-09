@@ -1,10 +1,10 @@
 from django.contrib.auth.password_validation import validate_password
-from django.utils.translation import gettext_lazy as _
 from django.db.transaction import atomic
+from django.utils.translation import gettext_lazy as _
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
 
-from customers.models import Customer, Address, City, Country
+from customers.models import Address, City, Country, Customer
 
 
 class CustomerSerializer(serializers.ModelSerializer):

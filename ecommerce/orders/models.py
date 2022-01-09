@@ -1,8 +1,8 @@
 from django.db import models
 from django.utils.translation import gettext_lazy as _
 
-from core.utils import phonenumber_validator, iban_validator
 from core.models import BaseAbstractModel
+from core.utils import iban_validator, phonenumber_validator
 from orders import enums
 from products.models import Product
 

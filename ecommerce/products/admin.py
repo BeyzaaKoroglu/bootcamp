@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from products.models import Category, Product, Stock, Price
+from products.models import Category, Price, Product, Stock
 
 
 class StockInline(admin.StackedInline):
